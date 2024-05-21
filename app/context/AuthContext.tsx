@@ -10,7 +10,7 @@ interface AuthProps {
 }
 
 const TOKEN_KEY = 'my-jwt';
-export const API_URL = 'https://api.developbetterapps.com'; // to be replaced with the API from BE
+export const API_URL = 'http://213.65.195.52:8180/login'; // to be replaced with the API from BE
 const AuthContext = createContext<AuthProps>({});
 
 export const useAuth = () => {
@@ -65,9 +65,13 @@ export const AuthProvider = ({children}: any) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const result = await axios.post(`${API_URL}/auth`, { email, password});
-
-      if (result.data && result.data.token){
+      const basicAuth = 'Basic bG9jYWxtYW5hZ2VyMUB0ZXN0dHQuY29tOnRlc3QxMjM=';
+      const result = await axios.get(`${API_URL}`, {
+        headers: {
+          'Authorization': basicAuth
+        }
+      });
+      if (result.data){
       console.log("file: AuthContext.tsx:41 ~ login ~ result:", result)
 
       setAuthState({
